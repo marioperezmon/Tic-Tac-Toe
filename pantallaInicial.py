@@ -1,30 +1,19 @@
-from Boton import boton
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import pygame
+from Boton import boton
 from time import sleep
 
-# Funcion que reinicia a la pantalla inicial
 def reset():
     import os
     import sys
     os.execl(sys.executable, sys.executable, *sys.argv)
 
-# Funcion que muestra un menu para elegir el modo de juego
+# elegir el modo de juego
 def menuInicial():
 
-    # Inicio configuracion pantalla + juego
     pygame.init()
-
-    # Textos a mostrar en la pantalla inicial
-    txtTitulo = "Tres en Raya"
-    txtModos = "Modos de Juego:"
-    txtModo1 = "1 vs 1"
-    txtModo2 = "1 vs PC"
-
-    # Titulo del juego
-    pygame.display.set_caption(txtTitulo)
-
-    # Tamanho de la pantalla de juego
-    size = width, height = 500, 400
 
     # Fondo y colores de la pantalla
     bg          = (240, 240, 240)
@@ -36,13 +25,17 @@ def menuInicial():
     dorado      = (168, 151, 50)
     doradoClaro = (224, 206, 99)
 
-    # Configuracion de la pantalla
+    txtTitulo = "Tres en Raya"
+    txtModos = "Modos de Juego:"
+    txtModo1 = "1 vs 1"
+    txtModo2 = "1 vs PC"
+
+    pygame.display.set_caption(txtTitulo)
+    size = width, height = 500, 400
     screen = pygame.display.set_mode(size)
 
-    # Rellenar la pantalla
     screen.fill(blanco)
 
-    # Botones
     btModo1 = boton(rojo  , 210, (height // 2) - 40, 70, 40, txtModo1)
     btModo2 = boton(rojo  , 210, (height // 2) + 15, 70, 40, txtModo2)
     btSalir = boton(dorado, 210, (height // 2) + 100, 70, 40, 'SALIR')
@@ -52,13 +45,11 @@ def menuInicial():
     modo[1] = "1 VS PC"
     modoSeleccionado = False
 
-    # Mientras no se haya elegido un modo de juego
     while not modoSeleccionado:
 
-        # Rellenar la pantalla
         screen.fill(blanco)
 
-        # Muestra los botones
+        # Render de los botones
         btSalir.draw(screen)
         btModo1.draw(screen)
         btModo2.draw(screen)
@@ -77,7 +68,6 @@ def menuInicial():
         textRect.center = (width // 2, (height // 6) + 40)
         screen.blit(text, textRect)
 
-        # sin un for de control de eventos, falla al abrir pygame window
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit()
@@ -119,3 +109,4 @@ def menuInicial():
                 btSalir.color = dorado
 
         pygame.display.update()
+

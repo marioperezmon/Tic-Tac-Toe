@@ -1,19 +1,22 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 # POSIBLES MEJORAS:
 #     Rehacer la forma en que comprueba el ganador
-#     Rehacer la forma en que el PC calcula su jugada
+#     Rehacer la forma en que el PC calcula su jugada (p. ej. comprobar si el jug1 tiene la victoria a 1 movimiento)
+#     En el modo VS PC, comprobar si jug1 ha ganado para que PC ya no haga su movimiento
 
 import pygame
+import numpy as np
 from pantallaInicial import menuInicial
 from Boton import boton
-import numpy as np
 
-# Funcion que reinicia a la pantalla inicial
 def reset():
     import os
     import sys
     os.execl(sys.executable, sys.executable, *sys.argv)
 
-# Funcion para comprobar el ganador
+# comprueba el ganador
 def checkWinner(jugadasJ1, jugadasJ2):
 
     ganador = ""
@@ -140,26 +143,22 @@ def pc_calculaJugada(copiaEstado):
     # print("Celda random selecionada = [" + str(x) + ", " + str(y) + "]")
     return x, y
 
-# Se selecciona un modo de juego
+###################################
+# START
+
 modoJuego = menuInicial()
 print("Empieza la partida (Modo " + modoJuego + ")")
 
-# Inicio configuracion pantalla + juego
 pygame.init()
 
-# Titulo del juego
-pygame.display.set_caption('Tres en Raya: ' + modoJuego)
-
-# Tamanho de la pantalla de juego
 size = width, height = 300, 350
 
-# Celdas de la cuadricula (3x3)
+# 3x3 celdas
 nXc = 3
 nYc = 3
 
-# Dimensiones de cada celda (pantalla de juego)
-# dimCH = height / nXc
-dimCH = 300 / nXc
+# Dimensiones de cada celda
+dimCH = height / nXc
 dimCW = width  / nYc
 
 # Fondo y colores de la pantalla
@@ -172,9 +171,9 @@ dorado = (168, 151, 50)
 doradoClaro = (224, 206, 99)
 
 # Configuracion de la pantalla
+pygame.display.set_caption('Tres en Raya: ' + modoJuego)
 screen = pygame.display.set_mode(size)
 
-# Rellenar la pantalla
 screen.fill(bg)
 
 # Crea el boton Reiniciar
