@@ -1,2 +1,2 @@
-# Tres en raya (Juego)
->Implementado en Python3
+# Juego Tres en raya
+>Implementado en Python3 con pygame
