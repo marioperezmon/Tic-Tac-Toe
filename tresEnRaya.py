@@ -2,14 +2,16 @@
 # -*- coding: utf-8 -*-
 
 '''
-    Define funciones para jugar una partida
+    Define una serie de variables y funciones para jugar una partida
     El metodo principal es empezarPartida, que es llamado por el script main
 '''
 
 # POSIBLES MEJORAS:
-#     Rehacer la forma en que comprueba el ganador
-#     Rehacer la forma en que el PC calcula su jugada (p. ej. comprobar si el jug1 tiene la victoria a 1 movimiento)
+#     Rehacer la forma en de compruebar el ganador
+#     Rehacer la forma en la que el PC calcula su jugada (p. ej. comprobar si alguien tiene la victoria a 1 movimiento)
 #     En el modo VS PC, comprobar si jug1 ha ganado para que PC ya no haga su movimiento
+# PENDIENTE: Cambiar boton "REINICIAR" por "JUGAR DE NUEVO" ?
+# TODO -> distribuir mejor en funciones diferenciadas la funcion empezarPartida()
 
 from somelib import *
 
@@ -19,92 +21,6 @@ from Resources.Boton import c_boton as boton
 from main import reset
 
 import pygame
-
-
-# comprueba el ganador
-def checkWinner(jugadasJ1, jugadasJ2):
-
-    ganador = ""
-    fin = False
-    empate = False
-
-    # Comprobacion de forma simple
-    movimientosJ1 = jugadasJ1.split(" ")
-    movimientosJ2 = jugadasJ2.split(" ")
-
-    # print ("j1 = ", movimientosJ1)
-    # print ("j2 = ", movimientosJ2)
-
-    # Comprobacion VERTICAL
-    if "00" in movimientosJ1 and "01" in movimientosJ1 and "02" in movimientosJ1:
-        ganador = "J1"
-        fin = True
-    elif "10" in movimientosJ1 and "11" in movimientosJ1 and "12" in movimientosJ1:
-        ganador = "J1"
-        fin = True
-    elif "20" in movimientosJ1 and "21" in movimientosJ1 and "22" in movimientosJ1:
-        ganador = "J1"
-        fin = True
-    elif "00" in movimientosJ2 and "01" in movimientosJ2 and "02" in movimientosJ2:
-        ganador = "J2"
-        fin = True
-    elif "10" in movimientosJ2 and "11" in movimientosJ2 and "12" in movimientosJ2:
-        ganador = "J2"
-        fin = True
-    elif "20" in movimientosJ2 and "21" in movimientosJ2 and "22" in movimientosJ2:
-        ganador = "J2"
-        fin = True
-    else:
-
-        # Comprobacion HORIZONTAL
-        if "00" in movimientosJ1 and "10" in movimientosJ1 and "20" in movimientosJ1:
-            ganador = "J1"
-            fin = True
-        elif "01" in movimientosJ1 and "11" in movimientosJ1 and "21" in movimientosJ1:
-            ganador = "J1"
-            fin = True
-        elif "02" in movimientosJ1 and "12" in movimientosJ1 and "22" in movimientosJ1:
-            ganador = "J1"
-            fin = True
-        elif "00" in movimientosJ2 and "10" in movimientosJ2 and "20" in movimientosJ2:
-            ganador = "J2"
-            fin = True
-        elif "01" in movimientosJ2 and "11" in movimientosJ2 and "21" in movimientosJ2:
-            ganador = "J2"
-            fin = True
-        elif "02" in movimientosJ2 and "12" in movimientosJ2 and "22" in movimientosJ2:
-            ganador = "J2"
-            fin = True
-        else:
-
-            # Comprobacion DIAGONAL
-            if "00" in movimientosJ1 and "11" in movimientosJ1 and "22" in movimientosJ1:
-                ganador = "J1"
-                fin = True
-            elif "20" in movimientosJ1 and "11" in movimientosJ1 and "02" in movimientosJ1:
-                ganador = "J1"
-                fin = True
-            elif "00" in movimientosJ2 and "11" in movimientosJ2 and "22" in movimientosJ2:
-                ganador = "J2"
-                fin = True
-            elif "20" in movimientosJ2 and "11" in movimientosJ2 and "02" in movimientosJ2:
-                ganador = "J2"
-                fin = True
-            else:
-
-                # Comprobacion EMPATE
-                # Se resta un espacio en blanco al final
-                numJugadasJ1 = len(movimientosJ1) - 1
-                # Se resta un espacio en blanco al final
-                numJugadasJ2 = len(movimientosJ2) - 1
-
-                # Si no hay ganador y se realizaron 9 jugadas, hay empate
-                if numJugadasJ1 + numJugadasJ2 == 9:
-                    ganador = "EMPATE"
-                    fin = True
-                    empate = True
-
-    return fin, ganador, empate
 
 # Funcion que calcula la jugada que hara el PC
 def pc_calculaJugada(copiaEstado):
@@ -126,29 +42,69 @@ def pc_calculaJugada(copiaEstado):
     # print("Celda random selecionada = [" + str(x) + ", " + str(y) + "]")
     return x, y
 
-# Funcion que inicia una partida de 1 VS 1
-def iniciaPartida1vs1():
+# Recibe las jugadas de ambos jugadores y comprueba si hay un ganador
+def checkWinner(jugadasJ1, jugadasJ2):
 
-    # Turnos jugadores (empieza el jugador 1)
-    turnoJ1 = True
+    ganador = ""
 
-    # Jugadas de cada jugador
-    jugadasJ1 = ""
-    jugadasJ2 = ""
+    movimientosJ1 = jugadasJ1.split(" ")
+    movimientosJ2 = jugadasJ2.split(" ")
 
-    # Estado (valores) inicial de la partida
-    estado = np.zeros((nXc, nYc))  # configuracion vacia
+    #print("cWinner - j1 = ", movimientosJ1)
+    #print("cWinner - j2 = ", movimientosJ2)
 
-    # Variable para controlar si la partida esta activa / terminada
-    partidaActiva = True
+    # Comprobacion VERTICAL
+    if "00" in movimientosJ1 and "01" in movimientosJ1 and "02" in movimientosJ1:
+        ganador = "J1"
+    elif "10" in movimientosJ1 and "11" in movimientosJ1 and "12" in movimientosJ1:
+        ganador = "J1"
+    elif "20" in movimientosJ1 and "21" in movimientosJ1 and "22" in movimientosJ1:
+        ganador = "J1"
+    elif "00" in movimientosJ2 and "01" in movimientosJ2 and "02" in movimientosJ2:
+        ganador = "J2"
+    elif "10" in movimientosJ2 and "11" in movimientosJ2 and "12" in movimientosJ2:
+        ganador = "J2"
+    elif "20" in movimientosJ2 and "21" in movimientosJ2 and "22" in movimientosJ2:
+        ganador = "J2"
+    else:
 
-    # Inicialmente, se pone fin a false
-    fin = False
+        # Comprobacion HORIZONTAL
+        if "00" in movimientosJ1 and "10" in movimientosJ1 and "20" in movimientosJ1:
+            ganador = "J1"
+        elif "01" in movimientosJ1 and "11" in movimientosJ1 and "21" in movimientosJ1:
+            ganador = "J1"
+        elif "02" in movimientosJ1 and "12" in movimientosJ1 and "22" in movimientosJ1:
+            ganador = "J1"
+        elif "00" in movimientosJ2 and "10" in movimientosJ2 and "20" in movimientosJ2:
+            ganador = "J2"
+        elif "01" in movimientosJ2 and "11" in movimientosJ2 and "21" in movimientosJ2:
+            ganador = "J2"
+        elif "02" in movimientosJ2 and "12" in movimientosJ2 and "22" in movimientosJ2:
+            ganador = "J2"
+        else:
 
-    # Se muestra un boton "INICIAR"
-    # PENDIENTE
+            # Comprobacion DIAGONAL
+            if "00" in movimientosJ1 and "11" in movimientosJ1 and "22" in movimientosJ1:
+                ganador = "J1"
+            elif "20" in movimientosJ1 and "11" in movimientosJ1 and "02" in movimientosJ1:
+                ganador = "J1"
+            elif "00" in movimientosJ2 and "11" in movimientosJ2 and "22" in movimientosJ2:
+                ganador = "J2"
+            elif "20" in movimientosJ2 and "11" in movimientosJ2 and "02" in movimientosJ2:
+                ganador = "J2"
+            else:
 
-    return turnoJ1, jugadasJ1, jugadasJ2, estado, partidaActiva, fin
+                # Comprobacion EMPATE
+                
+                # Se resta un espacio en blanco al final de las jugadas de ambos
+                numJugadasJ1 = len(movimientosJ1) - 1
+                numJugadasJ2 = len(movimientosJ2) - 1
+
+                # Si no hay ganador y se realizaron 9 jugadas, hay empate
+                if numJugadasJ1 + numJugadasJ2 == 9:
+                    ganador = "EMPATE"
+                    
+    return ganador
 
 # Metodo principal (comienza una nueva partida en el modo indicado por parametro)
 def empezarPartida(modo):
@@ -159,153 +115,138 @@ def empezarPartida(modo):
 
     pygame.display.set_caption('Tres en Raya - ' + modo)
 
-    size = width, height
     screen = pygame.display.set_mode(size)
 
-    bg = (240, 240, 240)
+    font = pygame.font.Font('freesansbold.ttf', 18)
+
     screen.fill(bg)
-    
-    # Numero de celdas (3x3) y dimensiones
-    nXc = 3
-    nYc = 3
 
-    dimCH = height / nXc
-    dimCW = width  / nYc
+    btReiniciar = boton(col.dorado, 170, 305, 80, 40, 'Reiniciar', fontSize=15)
+    btSalir     = boton(col.rojo, 250, 305, 40, 40, 'X', fontSize=15)
 
+    # Estado inicial de la partida (valor de cada celda: 0 -> no hay ficha , 1 -> hay ficha)
+    estado = np.zeros((nXc, nYc))
 
-    btReiniciar = boton(col.dorado, 170, 305, 80, 40, 'Reiniciar')
-    btSalir     = boton(col.rojo, 250, 305, 40, 40, 'X')
+    global turnoJ1, jugadasJ1, jugadasJ2
 
-    # Turnos jugadores
-    turnoJ1, jugadasJ1, jugadasJ2, estado, partidaActiva, fin = iniciaPartida1vs1()
+    # Se muestra un boton "INICIAR"
+    # PENDIENTE ??
 
-    while 1:
+    while True:
 
-        # Copia el estado de la partida
+        # Guarda una copia del estado de la partida
         copiaEstado = np.copy(estado)
 
-        # Rellenar la pantalla
         screen.fill(bg)
 
-        # Muestra los botones de reiniciar y salir
+        # Muestra los botones
         btReiniciar.draw(screen)
         btSalir.draw(screen)
 
-        # Comprueba si la partida termino y si hay ganador
-        fin, ganador, empate = checkWinner(jugadasJ1, jugadasJ2)
+        # Comprueba si hay ganador/empate
+        ganador = checkWinner(jugadasJ1, jugadasJ2)
 
-        # Si hubo empate, se muestra en el titulo
-        if empate:
-            txtEmpate = 'EMPATE'
+        '''
+            SE COMPRUEBA SI TERMINO O NO LA PARTIDA Y SI HUBO UN EMPATE/GANADOR
+        '''
 
-            # Mostrar empate (TITULO)
-            pygame.display.set_caption(txtEmpate)
+        fin = ganador != ""
+        
+        # Si termino la partida
+        if fin:
+             
+            # con empate
+            if ganador == "EMPATE":
+                colorMostrado = col.dorado
+                txtMostrado = ganador
 
-            # Mostrar empate (PANTALLA)
-            text = font.render(txtEmpate, True, col.dorado, bg)
-            textRect = text.get_rect()
-            textRect.center = (width // 3.7, 325)
-            screen.blit(text, textRect)
-
-        # Si no hubo empate, se muestran los turnos o el ganador
-        else:
-            font = pygame.font.Font('freesansbold.ttf', 18)
-
-            if fin: # Si la partida llego al fin, se muestra el ganador
-
-                # print("La partida llego al fin")
+            # sin empate, un ganador
+            else:
 
                 if ganador == "J1":
-                    txtGanador = "GANA JUG 1!!"
-                    colorGanador = col.rojo
-
-                elif ganador == "J2":
-                    # Si se juega 1 VS PC
-                    if modo == "1 VS PC":
-                        txtGanador = "GANA PC!!"
-
-                    else: # Si gana el J2 (PC)
-                        txtGanador = "GANA JUG 2!!"
-
-                    colorGanador = col.azul
-
-                # Mostrar ganador (TITULO)
-                pygame.display.set_caption(txtGanador)
-
-                # Mostrar ganador (PANTALLA)
-                text = font.render(txtGanador, True, colorGanador, bg)
-                textRect = text.get_rect()
-                textRect.center = (width // 3.7, 325)
-                screen.blit(text, textRect)
-
-                # PENDIENTE: Cambiar boton "REINICIAR" por "JUGAR DE NUEVO"
-
-            else: # Si no llego al fin, se muestra el turno
-
-                if turnoJ1:
-                    txtTurno = "Turno: Jugador 1"
-                    colorTurno = col.rojo
-
+                    colorMostrado = col.rojo
                 else:
-                    # Si se juega 1 VS PC
+                    colorMostrado = col.azul
+
+                    # si jugo vs pc, gano el pc, si no, gano el j2
                     if modo == "1 VS PC":
-                        txtTurno = "Turno: PC"
+                        ganador = "PC"
+                    
+                txtMostrado = "GANA " + ganador + "!"
+        
+        # Si no termino la partida
+        else:
 
-                    # Si se juega 1 VS 1
-                    else:
-                        txtTurno = "Turno: Jugador 2"
+            if turnoJ1:
+                txtMostrado = "Turno - Jugador 1"
+                colorMostrado = col.rojo
 
-                    colorTurno = col.azul
+            else:
 
-                # Mostrar turno (PANTALLA - "Turno: Jugador 1/2/PC")
-                text = font.render(txtTurno, True, colorTurno, bg)
-                textRect = text.get_rect()
-                textRect.center = (width // 3.7, 325)
-                screen.blit(text, textRect)
+                if modo == "1 VS PC":
+                    txtMostrado = "Turno - PC"
+                else:
+                    txtMostrado = "Turno - Jugador 2"
 
+                colorMostrado = col.azul
+            
+        # Muestra la info en el titulo y en la pantalla
+        pygame.display.set_caption(txtMostrado)
+
+        text = font.render(txtMostrado, True, colorMostrado, bg)
+        textRect = text.get_rect()
+        textRect.center = (width // 3.7, 325)
+        screen.blit(text, textRect)
+
+        '''
+            CONTROL DE EVENTOS (CLICKS O TECLAS) + ACTUALIZA LA COPIA DEL ESTADO CON LA NUEVA JUGADA HECHA
+        '''
         # Capturar eventos
         ev = pygame.event.get()
 
-        # Si se juega 1 VS 1, el juego va por clicks de ambos jugadores
-        if modo == "1 VS 1":
+        for event in ev:
 
-            # sin un for de control de eventos, falla al abrir pygame window
-            for event in ev:
-                if event.type == pygame.QUIT:
+            mousePos = pygame.mouse.get_pos()
+
+            if event.type == pygame.QUIT:
                     quit()
 
-                mousePos = pygame.mouse.get_pos()
+            # Si se pulsa una tecla
+            if event.type == pygame.KEYDOWN:
 
-                # Si se pulsa la tecla 'r', se reincia la partida
-                if event.type == pygame.KEYDOWN:
-                    key = pygame.key.get_pressed()
+                key = pygame.key.get_pressed()
 
-                    if key == 'r':
-                        reset()
+                if key == 'r': # TODO -> revisar pq no funciona esto...
+                    reset()
 
-                # Si se clica el boton 'Reiniciar', se reincia la partida
-                if event.type == pygame.MOUSEBUTTONDOWN:
-
-                    if btReiniciar.mouseIsOver(mousePos):
-                        reset()
-
-                    elif btSalir.mouseIsOver(mousePos):
-                        quit()
+            # Si hay un clic
+            if event.type == pygame.MOUSEBUTTONDOWN:
 
                 if btReiniciar.mouseIsOver(mousePos):
-                    btReiniciar.color = col.doradoClaro
-                else:
-                    btReiniciar.color = col.dorado
+                    reset()
 
-                if btSalir.mouseIsOver(mousePos):
-                    btSalir.color = col.rojoClaro
-                else:
-                    btSalir.color = col.rojo
+                elif btSalir.mouseIsOver(mousePos):
+                    quit()
 
-                mouseclick = pygame.mouse.get_pressed()
+            if btReiniciar.mouseIsOver(mousePos):
+                btReiniciar.color = col.doradoClaro
+            else:
+                btReiniciar.color = col.dorado
 
-                # Si se pulso el raton y la partida sigue activa
-                if sum(mouseclick) > 0 and not fin and not empate:
+            if btSalir.mouseIsOver(mousePos):
+                btSalir.color = col.rojoClaro
+            else:
+                btSalir.color = col.rojo
+
+            mouseclick = pygame.mouse.get_pressed()
+
+            # si termino la partida, el bucle continua pq podria darle a "X" o a "Reiniciar"
+            
+            # si no termino la partida
+            if not fin:
+
+                # si se pulso el raton en 1 VS 1
+                if modo == "1 VS 1" and sum(mouseclick) > 0:
 
                     # posicion del raton (en pixeles)
                     posX, posY = pygame.mouse.get_pos()
@@ -313,105 +254,67 @@ def empezarPartida(modo):
                     # calculo de celda
                     celX, celY = int(np.floor(posX / dimCW)), int(np.floor(posY / dimCH))
 
-                    # Si clicka dentro de el espacio de juego
+                    # Si clica dentro de el espacio de juego
                     if posX < width and posY < 300:
 
-                        # Si la celda no estaba ya ocupada
+                        # Si la celda no estaba ya "jugada" (elegida)
                         if copiaEstado[celX, celY] == 0:
-                            # actualizar estado de la celda
 
+                            # actualiza estado de la celda
                             copiaEstado[celX, celY] = 1
-                            # print("Se actualizo la casilla ", celX, celY, " con valor = ", copiaEstado[celX, celY])
+                            #print("Se actualizo la casilla ", celX, celY, " con valor = ", copiaEstado[celX, celY])
 
-                            # Apunta la jugada y pasa turno
+                            # Apunta la jugada y cambia el turno
                             if turnoJ1:
-                                jugadasJ1 = jugadasJ1 + str(celX) + str(celY) + " "
-                                turnoJ1 = False
+                                jugadasJ1 += str(celX) + str(celY) + " "
+                                
                             else:
-                                jugadasJ2 = jugadasJ2 + str(celX) + str(celY) + " "
-                                turnoJ1 = True
+                                jugadasJ2 += str(celX) + str(celY) + " "
+                            
+                            turnoJ1 = not turnoJ1
+                
+                elif modo == "1 VS PC":
 
-        # Si se juega 1 VS PC
-        else:
+                    # Si le toca al J1 y se pulso el raton
+                    if turnoJ1 and sum(mouseclick) > 0:
 
-            # Si le toca al J1, se recogen los clicks
-            if turnoJ1:
+                            # J1 clica una casilla y juega
 
-                # sin un for de control de eventos, falla al abrir pygame window
-                for event in ev:
-                    if event.type == pygame.QUIT:
-                        quit()
+                            # posicion del raton (en pixeles)
+                            posX, posY = pygame.mouse.get_pos()
 
-                    mousePos = pygame.mouse.get_pos()
+                            # calculo de celda
+                            celX, celY = int(np.floor(posX / dimCW)), int(np.floor(posY / dimCH))
 
-                    # Si se pulsa la tecla 'r', se reincia la partida
-                    if event.type == pygame.KEYDOWN:
-                        key = pygame.key.get_pressed()
+                            # Si clicka dentro de el espacio de juego
+                            if posX < width and posY < 300:
 
-                        if key == 'r':
-                            reset()
+                                # Si la celda no estaba ya ocupada
+                                if copiaEstado[celX, celY] == 0:
+                                    # actualizar estado de la celda
 
-                    # Si se clica el boton 'Reiniciar', se reincia la partida
-                    if event.type == pygame.MOUSEBUTTONDOWN:
+                                    copiaEstado[celX, celY] = 1
+                                    #print("Se actualizo la casilla ", celX, celY, " con valor = ", copiaEstado[celX, celY])
 
-                        if btReiniciar.mouseIsOver(mousePos):
-                            reset()
+                                    # Apunta la jugada y devuelve el turno al PC
+                                    jugadasJ1 += str(celX) + str(celY) + " "
+                                    turnoJ1 = False
 
-                        elif btSalir.mouseIsOver(mousePos):
-                            quit()
+                    # Si le toca al PC
+                    elif not turnoJ1:
 
-                    if btReiniciar.mouseIsOver(mousePos):
-                        btReiniciar.color = col.doradoClaro
-                    else:
-                        btReiniciar.color = col.dorado
+                        # PC calcula su jugada y juega
+                        celX, celY = pc_calculaJugada(copiaEstado)
 
-                    if btSalir.mouseIsOver(mousePos):
-                        btSalir.color = col.rojoClaro
-                    else:
-                        btSalir.color = col.rojo
+                        # actualizar estado de la celda
+                        copiaEstado[celX, celY] = 1
 
-                    mouseclick = pygame.mouse.get_pressed()
-
-                    # Si se pulso el raton y la partida sigue activa
-                    if sum(mouseclick) > 0 and not fin and not empate:
-
-                        # J1 clica una casilla y juega
-
-                        # posicion del raton (en pixeles)
-                        posX, posY = pygame.mouse.get_pos()
-
-                        # calculo de celda
-                        celX, celY = int(np.floor(posX / dimCW)), int(np.floor(posY / dimCH))
-
-                        # Si clicka dentro de el espacio de juego
-                        if posX < width and posY < 300:
-
-                            # Si la celda no estaba ya ocupada
-                            if copiaEstado[celX, celY] == 0:
-                                # actualizar estado de la celda
-
-                                copiaEstado[celX, celY] = 1
-                                # print("Se actualizo la casilla ", celX, celY, " con valor = ", copiaEstado[celX, celY])
-
-                                # Apunta la jugada de J1 y pasa turno
-                                jugadasJ1 = jugadasJ1 + str(celX) + str(celY) + " "
-                                turnoJ1 = False
-
-            # Si le toca al PC, se calcula su jugada
-            else:
-
-                # PC calcula su jugada y juega
-                celX, celY = pc_calculaJugada(copiaEstado)
-
-                # actualizar estado de la celda
-                copiaEstado[celX, celY] = 1
-
-                # Apunta la jugada de J1 y pasa turno
-                jugadasJ2 = jugadasJ2 + str(celX) + str(celY) + " "
-                turnoJ1 = True
-
-   
-            #RENDER DEL TABLERO
+                        # Apunta la jugada y devuelve el turno al J1
+                        jugadasJ2 += str(celX) + str(celY) + " "
+                        turnoJ1 = True
+        '''
+            RENDER DEL TABLERO
+        '''
  
         # Recorrer cada celda
         for x in range(0, nXc):
@@ -461,4 +364,30 @@ def empezarPartida(modo):
         estado = copiaEstado
 
         pygame.display.flip()
+
+#########################
+
+# Variables necesarias para iniciar y jugar una partida
+
+size = width, height = 300, 350
+bg = (240, 240, 240)
+
+# Numero de celdas (3x3) y dimensiones
+nXc = 3
+nYc = 3
+
+dimCH = height / nXc
+dimCW = width / nYc
+
+# Variable para controlar si le toca al jug1 o no (inicialmente si)
+turnoJ1 = True
+
+# String para guardar las jugadas de cada jugador
+jugadasJ1 = ""
+jugadasJ2 = ""
+
+# Inicialmente, se pone fin a false
+fin = False
+
+print("OJO!! Se han definido las variables basicas para iniciar una partida")
 
