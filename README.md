@@ -1,2 +1,9 @@
+
 # Juego Tres en raya
->Implementado en Python3 con pygame
+
+> Implementado en Python3 con pygame
+
+## Menu principal
+
+## Partida
+
