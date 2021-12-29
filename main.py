@@ -31,7 +31,7 @@ def mainMenu():
 
     screen.fill(col.blanco)
 
-    font = pygame.font.Font('freesansbold.ttf', 40)
+    font = pygame.font.Font('OwnFreeSansBold.ttf', 40)
     text = font.render(txtTitulo, True, col.rojo, col.blanco)
     textRect = text.get_rect()
     textRect.center = (width // 2, (height // 4))
