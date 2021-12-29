@@ -117,6 +117,6 @@ if __name__ == "__main__":
     # Funcion principal (muestra el menu y devuelve el modo seleccionado)
     modo = mainMenu()
 
-    from tresEnRaya import empezarPartida
-    empezarPartida(modo)
+    from partida import jugarPartida
+    jugarPartida(modo)
 
