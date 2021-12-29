@@ -10,14 +10,13 @@
 #     Rehacer la forma de comprobar el ganador
 #     Rehacer la forma en la que el PC calcula su jugada (p. ej. comprobar si alguien tiene la victoria a 1 movimiento)
 
-from somelib import *
-
 import Resources.Colours as col
 from Resources.Boton import c_boton as boton
 
 from main import reset
 
 import pygame
+import numpy as np
 
 # Funcion que muestra las jugadas de ambos jugadores en el tablero
 def renderTablero():

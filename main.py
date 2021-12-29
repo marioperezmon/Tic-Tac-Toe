@@ -26,7 +26,7 @@ def mainMenu():
     txtTitulo = "Tres en Raya - Modo"
     pygame.display.set_caption(txtTitulo)
 
-    size = width, height
+    size = width, height = 1280, 800
     screen = pygame.display.set_mode(size)
 
     screen.fill(col.blanco)
@@ -102,7 +102,7 @@ def mainMenu():
 
         pygame.display.update()
 
-from somelib import *
+import os, sys, signal
 
 if __name__ == "__main__":
 
