@@ -27,7 +27,7 @@ class c_boton():
 
         # Si hay un texto para mostrar en el boton
         if self.text != '':
-            font = pygame.font.Font('OwnFreeSansBold.ttf', self.fontSize)
+            font = pygame.font.Font('freesansbold.ttf', self.fontSize)
             text = font.render(self.text, True, col.negro)
             screen.blit(text, (self.x + (self.widht/2 - text.get_width()/2), self.y + (self.height/2 - text.get_height()/2)))
 

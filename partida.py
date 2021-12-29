@@ -380,7 +380,7 @@ height = width + height_turno
 size = width, height
 
 screen = pygame.display.set_mode(size)
-font = pygame.font.Font('OwnFreeSansBold.ttf', 18)
+font = pygame.font.Font('freesansbold.ttf', 18)
 
 bg = (240, 240, 240)
 
