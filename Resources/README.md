@@ -1,7 +1,7 @@
 
 # Resources package
 
-> It contains some useful elements
+> It contains common elements to all games
 
 * Botons
 * Colours
